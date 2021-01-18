@@ -13,36 +13,60 @@ semantic_parser = hanlp.load(hanlp.pretrained.sdp.SEMEVAL16_NEWS_BIAFFINE_ZH)
 
 #toker=tokenizer('收银员使用pos系统记录每件商品')
 #系统管理员可以运用的功能，像修改密码，管理学生信息、成绩信息、课程信息、班级信息并且设置权限。
-toker=tokenizer('收银员使用pos系统记录每件商品')
-print(toker)
-tagger = hanlp.load(hanlp.pretrained.pos.CTB9_POS_ALBERT_BASE)
-tag=tagger(toker)
-print(tag)
 
-argu=[]#########
-for i in range(len(toker)):
-    argu.append((toker[i],tag[i]))
+def POS_ana(text):
+    toker = tokenizer(text)
 
-syntactic_parser = hanlp.load(hanlp.pretrained.dep.CTB7_BIAFFINE_DEP_ZH)
-syntactic_analyse=syntactic_parser(argu)
-print(syntactic_analyse)
-#dict_keys(['id', 'form', 'cpos', 'pos', 'head', 'deprel', 'lemma', 'feats', 'phead', 'pdeprel'])
-#id是序号
-#form是词
-#lemma好像也是词
-#cpos是词性
-#head是父节点序号
-#deprel是关系
+    tag = tagger(toker)
+    return tag
 
-#只能从子节点找父节点，父节点不知道自己有哪些子节点
-s_index=[]#系统描述的id
-            #s_father_deprel实际上是{系统名：{'Pat': 2, 'Exp': 5}}
+def DP_ana(text):
+    toker=tokenizer(text)
+    tag=tagger(toker)
 
-#用于保存用例图的数据结构
-#{系统名:{actor:[usecase,usecase],actor:[usecase,usecase]}}
-use_case_dict={}
-for ele in syntactic_analyse:
-    if ele["deprel"]=="dobj":
-        use_case_dict[ele["head"]]=ele["id"]
-print(use_case_dict)
+    argu=[]
+    for i in range(len(toker)):
+        argu.append((toker[i],tag[i]))
+
+    argu = []
+    for i in range(len(toker)):
+        argu.append((toker[i], tag[i]))
+
+    syntactic_analyse = syntactic_parser(argu)
+    return syntactic_analyse
+
+# s="智能答复文档生成能够根据代理上传的专利审查相关的文档，智能识别审查意见中创造性、新颖性问题，并根据专利申请书以及审查意见中提到的文档进行智能比较，给出合理的回复，并把回复内容按一定格式生成文档。"
+# toker=tokenizer(s)
+# print(toker)
+# tagger = hanlp.load(hanlp.pretrained.pos.CTB9_POS_ALBERT_BASE)
+# tag=tagger(toker)
+# print(tag)
+#
+# argu=[]#########
+# for i in range(len(toker)):
+#     argu.append((toker[i],tag[i]))
+#
+# syntactic_parser = hanlp.load(hanlp.pretrained.dep.CTB7_BIAFFINE_DEP_ZH)
+# syntactic_analyse=syntactic_parser(argu)
+# print(syntactic_analyse)
+
+# #dict_keys(['id', 'form', 'cpos', 'pos', 'head', 'deprel', 'lemma', 'feats', 'phead', 'pdeprel'])
+# #id是序号
+# #form是词
+# #lemma好像也是词
+# #cpos是词性
+# #head是父节点序号
+# #deprel是关系
+#
+# #只能从子节点找父节点，父节点不知道自己有哪些子节点
+# s_index=[]#系统描述的id
+#             #s_father_deprel实际上是{系统名：{'Pat': 2, 'Exp': 5}}
+#
+# #用于保存用例图的数据结构
+# #{系统名:{actor:[usecase,usecase],actor:[usecase,usecase]}}
+# use_case_dict={}
+# for ele in syntactic_analyse:
+#     if ele["deprel"]=="dobj":
+#         use_case_dict[ele["head"]]=ele["id"]
+# print(use_case_dict)
 
