@@ -285,7 +285,7 @@ def has_english(string):
 
 def judge_usecase(possible_usecase_list):
     '''
-    初步判断是不是用例，根据长度，符号等
+    初步判断是不是用例，根据长度，符号等，相当于预处理
     :param possible_usecase_list:
     :return:
     '''
@@ -299,16 +299,57 @@ def judge_usecase(possible_usecase_list):
             pass
         else:
             if posuse!="" :
+                #必须有中文或者英文才是用例
                 if has_chinese(posuse) or has_english(posuse):
                     usecase.append(posuse)
     return usecase
 
+def join_pdf_text(pdf_list):
+    #根据长度，不满足一行的，不和下一行合并
+    max_length=0
+    for pl in pdf_list:
+        lpl=len(pl)
+        if max_length<lpl:
+            max_length=lpl
+    result_list=[]
+    add_str = ""
+    for pl in pdf_list:
+        print(pl)
+        if len(pl)<max_length-3:
+            add_str+=pl
+            result_list.append(add_str)
+            add_str=""
+        else:
+            add_str+=pl
+    result_list.append(add_str)
+    for ele in result_list:
+        print(ele)
+    return result_list
+
 def judge_usecase2(posuse_list,function_text):
-    function_string="".join(function_text)
-    has_chinese
+    #从语义层面进行判断。
+    functiong_l=join_pdf_text(function_text)
+    posuse_dict={}#{疑似用例：[语句，语句]}
+    for fl in functiong_l:
+        for posuse in posuse_list:
+            if posuse in fl:
+                if posuse in posuse_dict.keys():
+                    posuse_dict[posuse].append(fl)
+                else:
+                    posuse_dict[posuse]=[fl]
+    return posuse_dict
+
+def posuse_pre_process(posuse_list):
+    '''
+    输入是posuse_dict的一个元素的值
+    :param posuse_list:
+    :return:
+    '''
+
+
 
 #fulltext=input_doc("data\\ligang\\AI专利审查意见答复辅助系统项目用户需求.docx")
-fulltext=input_pdf("data\\ligang\\AI专利审查意见答复辅助系统项目用户需求.pdf")
+fulltext=input_pdf("data\\ligang\\物流规划项目用户需求_20200122.pdf")
 #result=pre_process(fulltext)
 cat_pag=find_catalogue(fulltext)
 cat_dict=get_catalogue_dict(cat_pag)
@@ -319,4 +360,6 @@ function_text=get_function_text(f_k,splited_dict)#通过f_k(功能描述章节�
 possible_usecase_list=extract_possible_usecase(function_text)
 #print(function_text)
 posuse=judge_usecase(possible_usecase_list)
-print("posuse:",posuse)
+posuse_dict=judge_usecase2(posuse,function_text)
+for k,v in posuse_dict.items():
+    print(k,v)
