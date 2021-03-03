@@ -39,8 +39,8 @@ def get_sdp(sentence):
     e1 = syntactic_parser(argu)
     print(e1)
 
-
-sen=split_sentence(usecase_desc)
-for s in sen:
-    get_sdp(s)
+if __name__=="__main__":
+    sen=split_sentence(usecase_desc)
+    for s in sen:
+        get_sdp(s)
 

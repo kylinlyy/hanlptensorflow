@@ -91,7 +91,7 @@ def find_catalogue(fulltext):
         line_list+=tex_list
     cat_list=[]
     for l in line_list:
-        if re.match("^[0-9一二三四五六七八九十].*[0-9\.]*\s*[a-zA-Z\u4e00-\u9fa5]+\s*\.+\s*[0-9]+$",l):
+        if re.match("^[0-9][0-9\.]*\s*[a-zA-Z\u4e00-\u9fa5]+\s*\.+\s*[0-9]+$",l):
             cat_list.append(l)
     if len(cat_list)>0:
         page="\n".join(cat_list)
@@ -106,7 +106,6 @@ def find_catalogue(fulltext):
     #     for line in linelist:
     #         if pattern.match(line):
     #             return page
-    print("cat_page:",page)
     return page
 def get_catalogue_dict(cat_pag):
 
@@ -432,11 +431,8 @@ def get_usecase_table(function_table):
 
 #fulltext=input_doc("data\\ligang\\AI专利审查意见答复辅助系统项目用户需求.docx")
 if __name__=="__main__":
-    fulltext,tables = input_pdf("data\\ligang\\物流规划项目用户需求_20200122.pdf")
-    fulltext=read_pdf_text.parse("data/ligang/物流规划项目用户需求_20200122.pdf")
-    txts="".join(fulltext)
-    with open('D:\\test.txt', 'w', encoding='utf-8') as f:
-        f.write(txts)
+    fulltext,tables = input_pdf("data\\fromInternet\\《劝学》 一课多媒体课件开发系统.pdf")
+    fulltext=read_pdf_text.parse("data\\fromInternet\\《劝学》 一课多媒体课件开发系统.pdf")
     function_table=get_function_table(tables)
     function_dict=get_usecase_table(function_table)
     print("function_dict:",function_dict)

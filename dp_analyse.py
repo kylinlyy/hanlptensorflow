@@ -2,6 +2,7 @@ import os
 os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 import tensorflow
 import hanlp
+import use_case_diagram
 tokenizer = hanlp.load('LARGE_ALBERT_BASE')
 tagger = hanlp.load(hanlp.pretrained.pos.CTB9_POS_ALBERT_BASE)
 semantic_parser = hanlp.load(hanlp.pretrained.sdp.SEMEVAL16_NEWS_BIAFFINE_ZH)
@@ -35,6 +36,8 @@ def DP_ana(text):
     syntactic_analyse = syntactic_parser(argu)
     return syntactic_analyse
 
+if __name__=="__main__":
+    print(use_case_diagram.get_sdp("收银员使用系统记录每个商品"))
 # s="智能答复文档生成能够根据代理上传的专利审查相关的文档，智能识别审查意见中创造性、新颖性问题，并根据专利申请书以及审查意见中提到的文档进行智能比较，给出合理的回复，并把回复内容按一定格式生成文档。"
 # toker=tokenizer(s)
 # print(toker)

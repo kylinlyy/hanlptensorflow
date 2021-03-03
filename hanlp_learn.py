@@ -26,7 +26,7 @@ semantic_parser = hanlp.load(hanlp.pretrained.sdp.SEMEVAL16_NEWS_BIAFFINE_ZH)
 
 #toker=tokenizer('收银员使用pos系统记录每件商品')
 #系统管理员可以运用的功能，像修改密码，管理学生信息、成绩信息、课程信息、班级信息并且设置权限。
-toker=tokenizer('收银员使用pos系统记录每件商品')
+toker=tokenizer('收银员使用系统记录每件商品')
 print(toker)
 tagger = hanlp.load(hanlp.pretrained.pos.CTB9_POS_ALBERT_BASE)
 tag=tagger(toker)

@@ -85,33 +85,20 @@ def find_catalogue(fulltext):
     :return:
     '''
     print("fulltext:",fulltext)
-    line_list=[]
-    for tex in fulltext:
-        tex_list=tex.split("\n")
-        line_list+=tex_list
-    cat_list=[]
-    for l in line_list:
-        if re.match("^[0-9一二三四五六七八九十].*[0-9\.]*\s*[a-zA-Z\u4e00-\u9fa5]+\s*\.+\s*[0-9]+$",l):
-            cat_list.append(l)
-    if len(cat_list)>0:
-        page="\n".join(cat_list)
-    else:
-        page=None
 
-    # pattern = re.compile(r'目\s*录')
-    #
-    # for page in fulltext:
-    #     print("page:",page)
-    #     linelist=page.split("\n")
-    #     for line in linelist:
-    #         if pattern.match(line):
-    #             return page
-    print("cat_page:",page)
-    return page
+    pattern = re.compile(r'目\s*录')
+
+    for page in fulltext:
+        print("page:",page)
+        linelist=page.split("\n")
+        for line in linelist:
+            if pattern.match(line):
+                return page
+    return None
 def get_catalogue_dict(cat_pag):
-
     pag_list=cat_pag.split("\n")
-    filter_empty(pag_list)
+    for pa in pag_list:
+        print("pa:",pa)
     pag_cat_dict={}
     for pag in pag_list:
         seqenc = ""
@@ -144,8 +131,6 @@ def get_cat_function(cat_dict):
 def filter_empty(f_list):
     while " " in f_list:
         f_list.remove(" ")
-    while "" in f_list:
-        f_list.remove("")
 
 def get_function_list(cat_dict,function_key):
     #function_key是指有“功能”字眼的题目
@@ -433,10 +418,7 @@ def get_usecase_table(function_table):
 #fulltext=input_doc("data\\ligang\\AI专利审查意见答复辅助系统项目用户需求.docx")
 if __name__=="__main__":
     fulltext,tables = input_pdf("data\\ligang\\物流规划项目用户需求_20200122.pdf")
-    fulltext=read_pdf_text.parse("data/ligang/物流规划项目用户需求_20200122.pdf")
-    txts="".join(fulltext)
-    with open('D:\\test.txt', 'w', encoding='utf-8') as f:
-        f.write(txts)
+    #fulltext=read_pdf_text.parse("data\\ligang\\物流规划项目用户需求_20200122.pdf")
     function_table=get_function_table(tables)
     function_dict=get_usecase_table(function_table)
     print("function_dict:",function_dict)
